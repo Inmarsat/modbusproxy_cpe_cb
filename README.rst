@@ -24,4 +24,4 @@ Reliable, secure, scalable data from your remote field devices anywhere in the w
 
 `Linux/Python Edge Proxy Documentation <https://inmarsat.github.io/modbusproxy_cpe_cb/>`_
 
-`IDP Modbus Lua Service Documentation <https://inmarsat.github.io/modbus_proxy/>`_
+`IDP Modbus Lua Service Documentation <https://inmarsat.github.io/idp_modbus_proxy/>`_
