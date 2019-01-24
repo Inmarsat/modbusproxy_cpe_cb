@@ -1,0 +1,654 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Welcome to modbusproxy_cpe_cb’s documentation! &#8212; modbusproxy_cpe_cb  documentation</title>
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">modbusproxy_cpe_cb  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to modbusproxy_cpe_cb’s documentation!</a><ul>
+<li><a class="reference internal" href="#module-modbus_server_adapter">modbus_server_adapter</a><ul>
+<li><a class="reference internal" href="#Named Arguments">Named Arguments</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-context">context</a></li>
+<li><a class="reference internal" href="#module-store">store</a></li>
+<li><a class="reference internal" href="#module-constants">constants</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-modbusproxy-cpe-cb-s-documentation">
+<h1>Welcome to modbusproxy_cpe_cb’s documentation!<a class="headerlink" href="#welcome-to-modbusproxy-cpe-cb-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<p>A proxy service for a <a class="reference external" href="https://www.clearblade.com/">ClearBlade</a> Edge that takes optimized Modbus slave data
+sent via the <a class="reference external" href="https://www.inmarsat.com/">Inmarsat</a> global satellite network
+and re-maps to native Modbus registers for use within a private Enterprise environment.</p>
+<p>Uses a secure HTTP connection between the Enterprise and ClearBlade public or private cloud,
+running within your LAN environment on private IP addresses.  Data collected from the field runs over
+the Inmarsat private network with secure connectivity to the ClearBlade platform.</p>
+<p>The solution imports a simple text configuration file of your Modbus RTU/outstation, compatible
+with Inmarsat’s <a class="reference external" href="https://www.inmarsat.com/service/isatdata-pro/">IsatData Pro</a> Modbus Proxy application
+running on <a class="reference external" href="https://www.orbcomm.com">ORBCOMM</a> IDP/Lua terminals
+such as the <a class="reference external" href="https://www.orbcomm.com/en/hardware/devices/st-series">ST6100</a>.
+You specify the set of registers you want to poll, and optimize the refresh rate plus compress the data
+to minimize network costs.  Supplement regular polling with remote analytics and alerts that make sure
+you trap relevant events or changes within seconds.  Your SCADA/master can poll within your Enterprise domain
+more frequently without missing an event, while getting less critical data in due course.</p>
+<p>Reliable, secure, scalable data from your remote field devices anywhere in the world.</p>
+<div class="section" id="module-modbus_server_adapter">
+<span id="modbus-server-adapter"></span><h2>modbus_server_adapter<a class="headerlink" href="#module-modbus_server_adapter" title="Permalink to this headline">¶</a></h2>
+<p>Inmarsat Modbus Proxy Adapter for ClearBlade connects to your ClearBlade cloud/platform using secure credentials.
+In ClearBlade you define Collections that map an IDP MobileID to a proxy IP address and TCP port.
+The Adapter runs on an Edge device such as Raspberry Pi, reads the mapping from the platform
+and sets up concurrent Modbus servers using PyModbus and the Twisted.internet framework.
+The Adapter creates IP aliases on the Edge and listens for Modbus TCP connections on each of the virtual interfaces.</p>
+<p>ClearBlade Collection Example <code class="docutils literal notranslate"><span class="pre">ModbusProxyRtus</span></code> for mapping MobileID to a local IP address:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="16%" />
+<col width="10%" />
+<col width="10%" />
+<col width="14%" />
+<col width="10%" />
+<col width="11%" />
+<col width="10%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>mobile_id</td>
+<td>ip_address</td>
+<td>tcp_port</td>
+<td>slave_id</td>
+<td>config_file</td>
+<td>latitude</td>
+<td>longitude</td>
+<td>altitude</td>
+</tr>
+<tr class="row-even"><td>00000000SKYEE3D</td>
+<td>192.168.1.200</td>
+<td>502</td>
+<td>1</td>
+<td>&lt;blob&gt;</td>
+<td>&lt;meta&gt;</td>
+<td>&lt;meta&gt;</td>
+<td>&lt;meta&gt;</td>
+</tr>
+</tbody>
+</table>
+<p>ClearBlade Collection Example <code class="docutils literal notranslate"><span class="pre">ModbusProxyData</span></code> that holds the latest reported data from the field:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="14%" />
+<col width="10%" />
+<col width="10%" />
+<col width="17%" />
+<col width="14%" />
+<col width="14%" />
+<col width="20%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>ip_address</td>
+<td>tcp_port</td>
+<td>slave_id</td>
+<td>register_address</td>
+<td>register_data</td>
+<td>register_type</td>
+<td>timestamp</td>
+</tr>
+<tr class="row-even"><td>192.168.1.200</td>
+<td>502</td>
+<td>1</td>
+<td>0</td>
+<td>123</td>
+<td>ir</td>
+<td>01/21/2019 07:00:00</td>
+</tr>
+</tbody>
+</table>
+<p>Register Types:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">ir</span></code> <strong>Input Register</strong> also sometimes referred to as read-only analog inputs</li>
+<li><code class="docutils literal notranslate"><span class="pre">hr</span></code> <strong>Holding Register</strong> sometimes referred to as read/write or output registers</li>
+<li><code class="docutils literal notranslate"><span class="pre">di</span></code> <strong>Discrete Input</strong> read-only boolean values sometimes called digital inputs or contact closures</li>
+<li><code class="docutils literal notranslate"><span class="pre">co</span></code> <strong>Coil</strong> read/write boolean values associated with digital outputs</li>
+</ul>
+</div></blockquote>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<ul class="last simple">
+<li>Setup for multiple instances running on virtual IP address/ports from a single host</li>
+<li>Proper credits for ClearBlade / Jim Bouquet</li>
+</ul>
+</div>
+<p>Inmarsat Modbus Proxy Adapter for ClearBlade</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">modbus_server_adapter</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">url</span> <span class="n">URL</span><span class="p">]</span> <span class="o">--</span><span class="n">systemKey</span> <span class="n">SYSTEMKEY</span>
+                                <span class="o">--</span><span class="n">systemSecret</span> <span class="n">SYSTEMSECRET</span>
+                                <span class="p">[</span><span class="o">--</span><span class="n">deviceName</span> <span class="n">DEVICENAME</span><span class="p">]</span> <span class="o">--</span><span class="n">deviceKey</span>
+                                <span class="n">DEVICEKEY</span> <span class="p">[</span><span class="o">--</span><span class="n">_slaves</span> <span class="n">SLAVES_COLLECTION</span><span class="p">]</span>
+                                <span class="p">[</span><span class="o">--</span><span class="n">data</span> <span class="n">DATA_COLLECTION</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">net</span> <span class="n">NET_IF</span><span class="p">]</span>
+                                <span class="p">[</span><span class="o">--</span><span class="n">ip</span> <span class="n">IP_ADDRESS</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">tcp</span> <span class="n">TCP_PORT</span><span class="p">]</span>
+                                <span class="p">[</span><span class="o">--</span><span class="n">logLevel</span> <span class="p">{</span><span class="n">INFO</span><span class="p">,</span><span class="n">DEBUG</span><span class="p">}]</span>
+                                <span class="p">[</span><span class="o">--</span><span class="n">heartbeat</span> <span class="n">HEARTBEAT</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Named Arguments">
+<h3>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this headline">¶</a></h3>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd>--url</kbd></td>
+<td><p class="first">The URL of the ClearBlade Platform the adapter will connect to.</p>
+<p class="last">Default: “<a class="reference external" href="https://platform.clearblade.com">https://platform.clearblade.com</a>”</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd>--systemKey</kbd></td>
+<td>The System Key of the ClearBlade platform System the adapter will connect to.</td></tr>
+<tr><td class="option-group">
+<kbd>--systemSecret</kbd></td>
+<td>The System Secret of the ClearBlade plaform System the adapter will connect to.</td></tr>
+<tr><td class="option-group">
+<kbd>--deviceName</kbd></td>
+<td><p class="first">The id/name of the device that will be used for device                         authentication against the ClearBlade platform or Edge, defined                         within the devices table of the ClearBlade platform.</p>
+<p class="last">Default: “ModbusProxyServerAdapter”</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd>--deviceKey</kbd></td>
+<td>The active key of the device that will be used for device                         authentication against the ClearBlade platform or Edge, defined within                         the Devices table of the ClearBlade platform.</td></tr>
+<tr><td class="option-group">
+<kbd>--_slaves</kbd></td>
+<td><p class="first">The ClearBlade Collection name with RTU proxy definitions</p>
+<p class="last">Default: “ModbusProxyRtus”</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd>--data</kbd></td>
+<td><p class="first">The ClearBlade Collection name with proxy data</p>
+<p class="last">Default: “ModbusProxyData”</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd>--net</kbd></td>
+<td><p class="first">The physical port of the network listener</p>
+<p class="last">Default: “eth0”</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd>--ip</kbd></td>
+<td><p class="first">The local IP Address the PyModbus server will listen on</p>
+<p class="last">Default: “localhost”</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd>--tcp</kbd></td>
+<td><p class="first">The local TCP Port the PyModbus server will listen on</p>
+<p class="last">Default: 502</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd>--logLevel</kbd></td>
+<td><p class="first">Possible choices: INFO, DEBUG</p>
+<p>The level of logging that will be utilized by the adapter.</p>
+<p class="last">Default: “INFO”</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd>--heartbeat</kbd></td>
+<td><p class="first">The logging heartbeat interval in seconds.</p>
+<p class="last">Default: 30</p>
+</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="module-context">
+<span id="context"></span><h2>context<a class="headerlink" href="#module-context" title="Permalink to this headline">¶</a></h2>
+<p>Establishes a PyModbus server/slave context that maps to ClearBlade platform collections.
+Requires a unique instance per slave device represented in the platform.</p>
+<dl class="class">
+<dt id="context.ClearBladeModbusProxySlaveContext">
+<em class="property">class </em><code class="descclassname">context.</code><code class="descname">ClearBladeModbusProxySlaveContext</code><span class="sig-paren">(</span><em>server_context</em>, <em>config</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#context.ClearBladeModbusProxySlaveContext" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Modbus slave context integrated with ClearBlade, derived from an Inmarsat IDP Modbus Proxy template file.
+Represents a single remote outstation / RTU</p>
+<p>The ClearBlade collection must have a row defining at least the following:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">ip_address</span></code> (str) the proxy address (IPv4) assigned to the remote outstation/RTU</li>
+<li><code class="docutils literal notranslate"><span class="pre">ip_port</span></code> (int) the (TCP) port of the proxy address for the RTU</li>
+<li><code class="docutils literal notranslate"><span class="pre">slave_id</span></code> (int) the Modbus Slave ID / Unit ID (0..254)</li>
+<li><code class="docutils literal notranslate"><span class="pre">zero_mode</span></code> (bool)</li>
+<li><code class="docutils literal notranslate"><span class="pre">last_report_time</span></code> (ts) timestamp of the most recently received data from the RTU in the field (metadata)</li>
+<li><code class="docutils literal notranslate"><span class="pre">config_file</span></code> (str) a formatted text file conforming to Inmarsat’s IDP Modbus Proxy template</li>
+</ul>
+</div></blockquote>
+<div class="admonition-todo admonition" id="index-1">
+<p class="first admonition-title">Todo</p>
+<p class="last">Add URL link to Modbus Proxy template</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>server_context</strong> (<a class="reference internal" href="#context.ClearBladeModbusProxyServerContext" title="context.ClearBladeModbusProxyServerContext"><em>ClearBladeModbusProxyServerContext</em></a>) – the parent server context</li>
+<li><strong>config</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – a row returned from reading the Clearblade collection for RTU configuration</li>
+<li><strong>kwargs</strong> – optional arguments such as log</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="context.ClearBladeModbusProxySlaveContext.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#context.ClearBladeModbusProxySlaveContext.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>NOT IMPLEMENTED - placeholder for future</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="context.ClearBladeModbusProxySlaveContext.validate">
+<code class="descname">validate</code><span class="sig-paren">(</span><em>fx</em>, <em>address</em>, <em>count=1</em><span class="sig-paren">)</span><a class="headerlink" href="#context.ClearBladeModbusProxySlaveContext.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validates the request to make sure it is in range</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fx</strong> – The function we are working with</li>
+<li><strong>address</strong> – The starting address</li>
+<li><strong>count</strong> – The number of values to test</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True if the request in within range, False otherwise</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="context.ClearBladeModbusProxySlaveContext.getValues">
+<code class="descname">getValues</code><span class="sig-paren">(</span><em>fx</em>, <em>address</em>, <em>count=1</em><span class="sig-paren">)</span><a class="headerlink" href="#context.ClearBladeModbusProxySlaveContext.getValues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validates the request to make sure it is in range</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fx</strong> – The function we are working with</li>
+<li><strong>address</strong> – The starting address</li>
+<li><strong>count</strong> – The number of values to retrieve</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The requested values from address:address+count</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="context.ClearBladeModbusProxySlaveContext.setValues">
+<code class="descname">setValues</code><span class="sig-paren">(</span><em>fx</em>, <em>address</em>, <em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#context.ClearBladeModbusProxySlaveContext.setValues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the datastore with the supplied values</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>fx</strong> – The function we are working with</li>
+<li><strong>address</strong> – The starting address</li>
+<li><strong>values</strong> – The new values to be set</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="context.ClearBladeModbusProxyServerContext">
+<em class="property">class </em><code class="descclassname">context.</code><code class="descname">ClearBladeModbusProxyServerContext</code><span class="sig-paren">(</span><em>cb_system</em>, <em>cb_auth</em>, <em>cb_slaves_config</em>, <em>cb_data</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#context.ClearBladeModbusProxyServerContext" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Modbus server context, initialized by reading a ClearBlade collection defining Slave configurations / templates</p>
+<p>Initialize the Server context</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>cb_system</strong> (<em>clearblade.ClearBladeCore.System</em>) – a ClearBlade System</li>
+<li><strong>cb_auth</strong> (<em>clearblade.ClearBladeCore.Device</em>) – a ClearBlade authenticated Device</li>
+<li><strong>cb_slaves_config</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – the name of the ClearBlade Collection holding Slave definitions</li>
+<li><strong>cb_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – the name of the ClearBlade Collection holding data</li>
+<li><strong>kwargs</strong> – optionally takes log definition</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-store">
+<span id="store"></span><h2>store<a class="headerlink" href="#module-store" title="Permalink to this headline">¶</a></h2>
+<p>Subclasses of the PyModbus data blocks integrated with a ClearBlade Platform.</p>
+<dl class="class">
+<dt id="store.CbModbusSequentialDataBlock">
+<em class="property">class </em><code class="descclassname">store.</code><code class="descname">CbModbusSequentialDataBlock</code><span class="sig-paren">(</span><em>context</em>, <em>register_type</em>, <em>address</em>, <em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#store.CbModbusSequentialDataBlock" title="Permalink to this definition">¶</a></dt>
+<dd><p>A custom subclass of the sequential data block that includes metadata for the ClearBlade platform context,
+register type, and timestamps of the field data</p>
+<p>Initializes the sequential datastore</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>context</strong> (<a class="reference internal" href="#context.ClearBladeModbusProxySlaveContext" title="context.ClearBladeModbusProxySlaveContext"><em>context.ClearBladeModbusProxySlaveContext</em></a>) – the parent/context of the data block</li>
+<li><strong>register_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – select from hr, ir, di, co</li>
+<li><strong>address</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the starting address for the sequential block</li>
+<li><strong>values</strong> (<em>iterable</em>) – Either a dictionary or list of values</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="store.CbModbusSequentialDataBlock.getValues">
+<code class="descname">getValues</code><span class="sig-paren">(</span><em>address</em>, <em>count=1</em><span class="sig-paren">)</span><a class="headerlink" href="#store.CbModbusSequentialDataBlock.getValues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the requested values of the datastore</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>address</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The starting address</li>
+<li><strong>count</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The number of values to retrieve</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The requested values from address:address+count</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="store.CbModbusSequentialDataBlock.setValues">
+<code class="descname">setValues</code><span class="sig-paren">(</span><em>address</em>, <em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#store.CbModbusSequentialDataBlock.setValues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the requested values of the datastore</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>address</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The starting address</li>
+<li><strong>values</strong> – The new value(s) to be set, accepts a single int or a list of int</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="store.CbModbusSequentialDataBlock.get_timestamps">
+<code class="descname">get_timestamps</code><span class="sig-paren">(</span><em>address</em>, <em>count=1</em><span class="sig-paren">)</span><a class="headerlink" href="#store.CbModbusSequentialDataBlock.get_timestamps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the timestamps of the field data for the specified registers</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>address</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the starting address</li>
+<li><strong>count</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the number of registers to query</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">timestamps of the requested registers</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list of str</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="store.CbModbusSparseDataBlock">
+<em class="property">class </em><code class="descclassname">store.</code><code class="descname">CbModbusSparseDataBlock</code><span class="sig-paren">(</span><em>context</em>, <em>register_type</em>, <em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#store.CbModbusSparseDataBlock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the sparse datastore.
+Using the input values it creates the default datastore value and the starting address</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>context</strong> (<a class="reference internal" href="#context.ClearBladeModbusProxySlaveContext" title="context.ClearBladeModbusProxySlaveContext"><em>context.ClearBladeModbusProxySlaveContext</em></a>) – the parent/context of the data block</li>
+<li><strong>register_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – select from hr, ir, di, co</li>
+<li><strong>values</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – Either a dictionary or list of values</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="store.CbModbusSparseDataBlock.getValues">
+<code class="descname">getValues</code><span class="sig-paren">(</span><em>address</em>, <em>count=1</em><span class="sig-paren">)</span><a class="headerlink" href="#store.CbModbusSparseDataBlock.getValues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the requested values of the datastore</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>address</strong> – The starting address</li>
+<li><strong>count</strong> – The number of values to retrieve</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The requested values from a:a+c</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="store.CbModbusSparseDataBlock.setValues">
+<code class="descname">setValues</code><span class="sig-paren">(</span><em>address</em>, <em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#store.CbModbusSparseDataBlock.setValues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the requested values of the datastore</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>address</strong> – The starting address</li>
+<li><strong>values</strong> – The new values to be set</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="store.CbModbusSparseDataBlock.get_timestamps">
+<code class="descname">get_timestamps</code><span class="sig-paren">(</span><em>address</em>, <em>count=1</em><span class="sig-paren">)</span><a class="headerlink" href="#store.CbModbusSparseDataBlock.get_timestamps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the timestamps of the field data for the specified registers</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>address</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the starting address</li>
+<li><strong>count</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the number of registers to query</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">timestamps of the requested registers in the format {address: timestamp}</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict of str</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="store.read_collection_data">
+<code class="descclassname">store.</code><code class="descname">read_collection_data</code><span class="sig-paren">(</span><em>context</em>, <em>register_type</em>, <em>address</em>, <em>count</em>, <em>fill=0</em><span class="sig-paren">)</span><a class="headerlink" href="#store.read_collection_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve data from the specified collection.
+When retrieving sequential blocks if the ClearBlade collection is missing registers between the start and end,
+those will be filled (optionally)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>context</strong> (<a class="reference internal" href="#context.ClearBladeModbusProxySlaveContext" title="context.ClearBladeModbusProxySlaveContext"><em>context.ClearBladeModbusProxySlaveContext</em></a>) – The ClearBlade parent metadata to query against.</li>
+<li><strong>register_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – the type of register (‘co’, ‘di’, ‘hr’, ‘ir’)</li>
+<li><strong>address</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The starting address</li>
+<li><strong>count</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The number of values to retrieve</li>
+<li><strong>fill</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – automatically fills gaps in sequential register blocks with this value (or None)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">values, timestamps of the data read from the ClearBlade collection/proxy</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a> or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)">dict</a> (sequential or sparse)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="store.write_collection_data">
+<code class="descclassname">store.</code><code class="descname">write_collection_data</code><span class="sig-paren">(</span><em>context</em>, <em>register_type</em>, <em>address</em>, <em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#store.write_collection_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve input register values from the Analog_Input_Registers collection</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>context</strong> (<a class="reference internal" href="#context.ClearBladeModbusProxySlaveContext" title="context.ClearBladeModbusProxySlaveContext"><em>context.ClearBladeModbusProxySlaveContext</em></a>) – The ClearBlade parent metadata to query against.</li>
+<li><strong>register_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – the type of register (co, di, hr, ir)</li>
+<li><strong>address</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The starting address</li>
+<li><strong>data</strong> – The data value(s) to write</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-constants">
+<span id="constants"></span><h2>constants<a class="headerlink" href="#module-constants" title="Permalink to this headline">¶</a></h2>
+<p>A set of constants used in the ClearBlade platform Collections
+and the Modbus Proxy Lua service <code class="docutils literal notranslate"><span class="pre">config.dat</span></code> file.</p>
+</div>
+<div class="section" id="indices-and-tables">
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">modbusproxy_cpe_cb  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, G Bruce-Payne.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.6.
+    </div>
+  </body>
+</html>
